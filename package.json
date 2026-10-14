@@ -6,15 +6,71 @@
   "main": "main.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/aselens/cibo-calculator.git"
+    "url": "https://github.com/aselens-software/cibo-calculator.git"
   },
   "homepage": "https://aselens.com",
   "bugs": {
-    "url": "https://github.com/aselens/cibo-calculator/issues"
+    "url": "https://github.com/aselens-software/cibo-calculator/issues"
   },
   "scripts": {
     "start": "electron .",
-    "test": "electron tests/test_app.js"
+    "test": "electron tests/test_app.js",
+    "dist": "electron-builder",
+    "dist:linux": "electron-builder --linux",
+    "dist:win": "electron-builder --win",
+    "dist:mac": "electron-builder --mac",
+    "dist:all": "electron-builder -mwl"
+  },
+  "build": {
+    "appId": "com.aselens.CiboCalculator",
+    "productName": "CIBO Calculator",
+    "copyright": "Copyright © 2026 Aselens Software",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "i18n.js",
+      "styles/**/*",
+      "icon.png",
+      "icon.svg",
+      "package.json"
+    ],
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb",
+        "tar.gz"
+      ],
+      "category": "Utility",
+      "icon": "icon.png"
+    },
+    "win": {
+      "target": [
+        "nsis",
+        "portable",
+        "zip"
+      ],
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "CIBO Calculator"
+    },
+    "mac": {
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "category": "public.app-category.utilities",
+      "icon": "icon.icns"
+    }
   },
   "keywords": [
     "calculator",
@@ -31,6 +87,7 @@
   "author": "Aselens Software <https://aselens.com>",
   "license": "MIT",
   "devDependencies": {
-    "electron": "^44.7.2"
+    "electron": "^44.7.2",
+    "electron-builder": "^26.7.0"
   }
 }
