@@ -1,0 +1,37 @@
+# Maintainer: Aselens Software <https://aselens.com>
+pkgname=cibo-calculator
+pkgver=1.3.3
+pkgrel=1
+pkgdesc="Modern, customizable desktop calculator and unit converter with 30+ themes"
+arch=('any')
+url="https://github.com/aselens/cibo-calculator"
+license=('MIT')
+depends=('electron' 'nodejs')
+makedepends=('git')
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz"
+        "cibo-calculator.sh"
+        "cibo-calculator.desktop")
+sha256sums=('SKIP'
+            'SKIP'
+            'SKIP')
+
+package() {
+  cd "$srcdir/$pkgname-$pkgver"
+
+  # Install Application Resources
+  install -d "$pkgdir/usr/lib/$pkgname"
+  cp -r index.html main.js preload.js renderer.js i18n.js styles package.json "$pkgdir/usr/lib/$pkgname/"
+
+  # Install Binary Launcher Script
+  install -Dm755 "$srcdir/cibo-calculator.sh" "$pkgdir/usr/bin/cibo-calculator"
+
+  # Install Desktop File
+  install -Dm644 "$srcdir/cibo-calculator.desktop" "$pkgdir/usr/share/applications/cibo-calculator.desktop"
+
+  # Install Application Icons
+  install -Dm644 icon.svg "$pkgdir/usr/share/icons/hicolor/scalable/apps/cibo-calculator.svg"
+  install -Dm644 icon.png "$pkgdir/usr/share/icons/hicolor/256x256/apps/cibo-calculator.png"
+
+  # Install License
+  install -Dm644 LICENSE "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

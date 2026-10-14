@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Production builds & packaging
+dist/
+build/
+out/
+*.AppImage
+*.deb
+*.rpm
+*.tar.gz
+
+# Local user data and persistence logs
+data/
+calculator_history.json
+calculator_settings.json
+*.log
+
+# System files
+.DS_Store
+Thumbs.db

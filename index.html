@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 'unsafe-inline' data:; style-src 'self' 'unsafe-inline'; font-src 'self' data:;">
+  <title>CIBO Calculator</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="styles/themes.css">
+</head>
+<body class="theme-default mode-dark no-transparency">
+  <div id="app" class="app-container">
+    
+    <!-- Custom Window Titlebar (CSD) -->
+    <header class="custom-titlebar" id="titlebar">
+      <!-- Hamburger Menu Button (NON-DRAGGABLE) -->
+      <button id="btn-open-nav" class="header-btn icon-btn nav-trigger-btn" title="Gezinme Menüsü (Modlar)">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2">
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+
+      <!-- Draggable Window Title Region -->
+      <div class="titlebar-drag-region">
+        <div class="app-branding">
+          <img src="icon.svg" class="app-icon" alt="CIBO Logo">
+          <span class="app-title" id="current-mode-title">Standart</span>
+        </div>
+      </div>
+
+      <!-- Quick Action Bar -->
+      <div class="titlebar-actions">
+        <!-- Transparency / Acrylic Glass Toggle Button -->
+        <button id="btn-toggle-transparency" class="header-btn icon-btn" title="Saydamlık / Akrilik Efekti">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+          </svg>
+        </button>
+
+        <!-- Theme Picker Button -->
+        <button id="btn-open-themes" class="header-btn icon-btn" title="Temalar (30 Özel Tema)">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+            <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
+            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.563-2.512 5.563-5.563C22 6.5 17.5 2 12 2z"></path>
+          </svg>
+        </button>
+
+        <!-- Light / Dark Mode Toggle -->
+        <button id="btn-toggle-color-scheme" class="header-btn icon-btn" title="Açık / Koyu Mod">
+          <!-- Sun icon (shown in dark mode) -->
+          <svg class="icon-sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+          <!-- Moon icon (shown in light mode) -->
+          <svg class="icon-moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </button>
+
+        <!-- History Sidebar Toggle -->
+        <button id="btn-toggle-history" class="header-btn icon-btn" title="Geçmiş">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Native-Style Custom Window Controls (Min, Max, Close) -->
+      <div class="window-controls">
+        <button id="btn-window-min" class="win-btn win-min" title="Küçült" aria-label="Küçült">
+          <svg viewBox="0 0 10 10" width="10" height="10">
+            <line x1="0" y1="5" x2="10" y2="5" stroke="currentColor" stroke-width="1.2" />
+          </svg>
+        </button>
+        <button id="btn-window-max" class="win-btn win-max" title="Büyüt / Geri Yükle" aria-label="Büyüt">
+          <svg class="icon-maximize" viewBox="0 0 10 10" width="10" height="10">
+            <rect x="1" y="1" width="8" height="8" fill="none" stroke="currentColor" stroke-width="1.2" />
+          </svg>
+          <svg class="icon-restore" viewBox="0 0 10 10" width="10" height="10">
+            <rect x="3" y="1" width="6" height="6" fill="none" stroke="currentColor" stroke-width="1.2" />
+            <path d="M1 3v6h6" fill="none" stroke="currentColor" stroke-width="1.2" />
+          </svg>
+        </button>
+        <button id="btn-window-close" class="win-btn win-close" title="Kapat" aria-label="Kapat">
+          <svg viewBox="0 0 10 10" width="10" height="10">
+            <line x1="1" y1="1" x2="9" y2="9" stroke="currentColor" stroke-width="1.2" />
+            <line x1="9" y1="1" x2="1" y2="9" stroke="currentColor" stroke-width="1.2" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Drawer (Windows 11 Mode List) -->
+    <aside class="nav-drawer" id="nav-drawer">
+      <div class="nav-drawer-header">
+        <div class="nav-drawer-title">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="2" width="16" height="20" rx="3"></rect>
+            <line x1="8" y1="6" x2="16" y2="6"></line>
+            <line x1="16" y1="14" x2="16" y2="18"></line>
+          </svg>
+          <span id="nav-title-text">Hesap Makinesi Menüsü</span>
+        </div>
+        <button class="nav-drawer-close" id="btn-close-nav" title="Kapat">✕</button>
+      </div>
+
+      <div class="nav-drawer-content">
+        <!-- Category: Calculator Modes -->
+        <div class="nav-section-title" id="nav-sec-calc">HESAP MAKİNESİ</div>
+        <div class="nav-item active" data-mode="standard">
+          <span class="nav-item-icon">🧮</span>
+          <span class="nav-item-text">Standart</span>
+          <span class="nav-item-shortcut">Alt + 1</span>
+        </div>
+        <div class="nav-item" data-mode="scientific">
+          <span class="nav-item-icon">🧪</span>
+          <span class="nav-item-text">Bilimsel</span>
+          <span class="nav-item-shortcut">Alt + 2</span>
+        </div>
+        <div class="nav-item" data-mode="graphing">
+          <span class="nav-item-icon">📈</span>
+          <span class="nav-item-text">Grafik Çizici</span>
+          <span class="nav-item-shortcut">Alt + 3</span>
+        </div>
+        <div class="nav-item" data-mode="programmer">
+          <span class="nav-item-icon">💻</span>
+          <span class="nav-item-text">Programcı</span>
+          <span class="nav-item-shortcut">Alt + 4</span>
+        </div>
+        <div class="nav-item" data-mode="date">
+          <span class="nav-item-icon">📅</span>
+          <span class="nav-item-text">Tarih Hesaplama</span>
+          <span class="nav-item-shortcut">Alt + 5</span>
+        </div>
+
+        <!-- Category: Converters -->
+        <div class="nav-section-title" id="nav-sec-conv">DÖNÜŞTÜRÜCÜ</div>
+        <div class="nav-item" data-mode="converter-currency">
+          <span class="nav-item-icon">💱</span>
+          <span class="nav-item-text">Para Birimi (Kur)</span>
+          <span class="nav-item-shortcut">Alt + 6</span>
+        </div>
+        <div class="nav-item" data-mode="converter-volume">
+          <span class="nav-item-icon">🥤</span>
+          <span class="nav-item-text">Hacim / Sıvı</span>
+          <span class="nav-item-shortcut">Alt + 7</span>
+        </div>
+        <div class="nav-item" data-mode="converter-length">
+          <span class="nav-item-icon">📏</span>
+          <span class="nav-item-text">Uzunluk</span>
+          <span class="nav-item-shortcut">Alt + 8</span>
+        </div>
+        <div class="nav-item" data-mode="converter-weight">
+          <span class="nav-item-icon">⚖️</span>
+          <span class="nav-item-text">Ağırlık ve Kütle</span>
+          <span class="nav-item-shortcut">Alt + 9</span>
+        </div>
+        <div class="nav-item" data-mode="converter-temperature">
+          <span class="nav-item-icon">🌡️</span>
+          <span class="nav-item-text">Sıcaklık</span>
+          <span class="nav-item-shortcut">Alt + 0</span>
+        </div>
+        <div class="nav-item" data-mode="converter-energy">
+          <span class="nav-item-icon">⚡</span>
+          <span class="nav-item-text">Enerji</span>
+        </div>
+        <div class="nav-item" data-mode="converter-area">
+          <span class="nav-item-icon">🗺️</span>
+          <span class="nav-item-text">Alan</span>
+        </div>
+        <div class="nav-item" data-mode="converter-speed">
+          <span class="nav-item-icon">🚗</span>
+          <span class="nav-item-text">Hız</span>
+        </div>
+        <div class="nav-item" data-mode="converter-time">
+          <span class="nav-item-icon">⏱️</span>
+          <span class="nav-item-text">Zaman</span>
+        </div>
+        <div class="nav-item" data-mode="converter-power">
+          <span class="nav-item-icon">💡</span>
+          <span class="nav-item-text">Güç</span>
+        </div>
+        <div class="nav-item" data-mode="converter-data">
+          <span class="nav-item-icon">💾</span>
+          <span class="nav-item-text">Veri</span>
+        </div>
+        <div class="nav-item" data-mode="converter-pressure">
+          <span class="nav-item-icon">🌪️</span>
+          <span class="nav-item-text">Basınç</span>
+        </div>
+        <div class="nav-item" data-mode="converter-angle">
+          <span class="nav-item-icon">📐</span>
+          <span class="nav-item-text">Açı</span>
+        </div>
+      </div>
+
+      <!-- Navigation Drawer Footer (Kısayollar & Hakkında) -->
+      <div class="nav-drawer-footer">
+        <button class="nav-footer-btn" id="btn-open-shortcuts" title="Klavye Kısayolları">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M6 12h.001M10 12h.001M14 12h.001M18 12h.001M7 16h10"></path>
+          </svg>
+          <span id="nav-btn-shortcuts-text">Kısayol Ayarları</span>
+        </button>
+        <button class="nav-footer-btn" id="btn-open-about" title="Hakkında">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="16" x2="12" y2="12"></line>
+            <line x1="12" y1="8" x2="12.01" y2="8"></line>
+          </svg>
+          <span id="nav-btn-about-text">Hakkında</span>
+        </button>
+      </div>
+    </aside>
+    <div class="nav-drawer-overlay" id="nav-drawer-overlay"></div>
+
+    <!-- Main Calculator Body -->
+    <main class="calculator-body">
+
+      <!-- ===================================================================
+           VIEW 1: STANDART VE BİLİMSEL MOD
+            =================================================================== -->
+      <div class="calc-view" id="view-standard-scientific">
+        <!-- Display Area -->
+        <section class="display-container" id="display-container">
+          <div class="expression-display" id="expression-display" aria-live="polite"></div>
+          <div class="value-display-wrapper">
+            <div class="value-display" id="value-display" aria-live="assertive">0</div>
+          </div>
+          <div class="status-bar" id="status-bar">
+            <span id="badge-angle" class="status-badge" style="display: none;">DEG</span>
+            <span id="badge-paren" class="status-badge" style="display: none;">( 0</span>
+            <span id="badge-memory" class="status-badge" style="display: none;">M</span>
+            <span id="badge-2nd" class="status-badge" style="display: none;">2nd</span>
+          </div>
+        </section>
+
+        <!-- Memory Bar (Windows Calculator Style: MC, MR, M+, M-, MS, Mv) -->
+        <div class="memory-bar" id="memory-bar">
+          <button class="mem-btn disabled" id="btn-mc" data-action="mc" title="Belleği Temizle (MC)">MC</button>
+          <button class="mem-btn disabled" id="btn-mr" data-action="mr" title="Bellekten Çağır (MR)">MR</button>
+          <button class="mem-btn" id="btn-mplus" data-action="mplus" title="Belleğe Ekle (M+)">M+</button>
+          <button class="mem-btn" id="btn-mminus" data-action="mminus" title="Bellekten Çıkar (M-)">M−</button>
+          <button class="mem-btn" id="btn-ms" data-action="ms" title="Belleğe Kaydet (MS)">MS</button>
+          <button class="mem-btn disabled" id="btn-mflyout" data-action="mflyout" title="Bellek Paneli">M▾</button>
+        </div>
+
+        <!-- Toast Feedback Notification -->
+        <div id="toast-notify" class="toast-notify"></div>
+
+        <!-- Scientific Functions Grid -->
+        <section class="scientific-keypad" id="scientific-keypad" style="display: none;">
+          <button class="key-btn key-fn" data-action="toggle-angle" id="btn-angle-toggle">DEG</button>
+          <button class="key-btn key-fn" data-action="fn-2nd" id="btn-2nd">2ⁿᵈ</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="sin">sin</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="cos">cos</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="tan">tan</button>
+
+          <button class="key-btn key-fn" data-action="fn" data-fn="pi">π</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="e">e</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="power">xʸ</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="power10">10ˣ</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="log">log</button>
+
+          <button class="key-btn key-fn" data-action="fn" data-fn="ln">ln</button>
+          <button class="key-btn key-fn" data-action="paren-open">(</button>
+          <button class="key-btn key-fn" data-action="paren-close">)</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="factorial">n!</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="mod">mod</button>
+
+          <button class="key-btn key-fn" data-action="fn" data-fn="reciprocal" title="1 bölü x (1/x)">¹/𝑥</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="square" title="Kare (x²)">𝑥²</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="sqrt" title="Karekök (√x)">²√𝑥</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="cube">x³</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="cbrt">∛x</button>
+
+          <button class="key-btn key-fn" data-action="fn" data-fn="exp">exp</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="abs">|x|</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="power2">2ˣ</button>
+          <button class="key-btn key-fn" data-action="ce" title="Girdiyi Sil (CE)">CE</button>
+          <button class="key-btn key-fn" data-action="fn" data-fn="rand" title="Rastgele Sayı">rand</button>
+        </section>
+
+        <!-- Standard Keypad Grid -->
+        <section class="standard-keypad" id="standard-keypad">
+          <button class="key-btn key-top" data-action="c" title="Temizle (C)">C</button>
+          <button class="key-btn key-top" data-action="backspace" title="Geri Al (⌫)">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+              <line x1="18" y1="9" x2="12" y2="15"></line>
+              <line x1="12" y1="9" x2="18" y2="15"></line>
+            </svg>
+          </button>
+          <button class="key-btn key-top" data-action="percent" title="Yüzde (%)">%</button>
+          <button class="key-btn key-op" data-op="÷" title="Böl (÷)">÷</button>
+
+          <button class="key-btn key-num" data-num="7">7</button>
+          <button class="key-btn key-num" data-num="8">8</button>
+          <button class="key-btn key-num" data-num="9">9</button>
+          <button class="key-btn key-op" data-op="×" title="Çarp (×)">×</button>
+
+          <button class="key-btn key-num" data-num="4">4</button>
+          <button class="key-btn key-num" data-num="5">5</button>
+          <button class="key-btn key-num" data-num="6">6</button>
+          <button class="key-btn key-op" data-op="−" title="Çıkar (−)">−</button>
+
+          <button class="key-btn key-num" data-num="1">1</button>
+          <button class="key-btn key-num" data-num="2">2</button>
+          <button class="key-btn key-num" data-num="3">3</button>
+          <button class="key-btn key-op" data-op="+" title="Topla (+)">+</button>
+
+          <button class="key-btn key-fn" data-action="negate" title="İşaret Değiştir (±)">±</button>
+          <button class="key-btn key-num key-zero" data-num="0">0</button>
+          <button class="key-btn key-num" data-action="decimal">.</button>
+          <button class="key-btn key-equals" data-action="equals" title="Eşittir (=)">=</button>
+        </section>
+      </div>
+
+      <!-- ===================================================================
+           VIEW 2: GRAFİK ÇİZİCİ (GRAPHING CALCULATOR)
+           =================================================================== -->
+      <div class="calc-view" id="view-graphing" style="display: none;">
+        <div class="graphing-header">
+          <div class="graph-input-wrap">
+            <span class="graph-f-prefix">y =</span>
+            <input type="text" id="graph-expr-input" class="graph-input" placeholder="Örn: sin(x), x^2 - 4, cos(x)*2" value="sin(x)">
+            <button id="btn-plot-graph" class="graph-action-btn primary" title="Çiz">Çiz</button>
+            <button id="btn-clear-graph" class="graph-action-btn" title="Temizle">Temizle</button>
+          </div>
+          <!-- Quick formula chips -->
+          <div class="graph-chips">
+            <button class="graph-chip" data-fn="sin(x)">sin(x)</button>
+            <button class="graph-chip" data-fn="cos(x)">cos(x)</button>
+            <button class="graph-chip" data-fn="x^2 - 3">x² - 3</button>
+            <button class="graph-chip" data-fn="x^3 - 3*x">x³ - 3x</button>
+            <button class="graph-chip" data-fn="1/x">1/x</button>
+            <button class="graph-chip" data-fn="sqrt(x)">√x</button>
+          </div>
+        </div>
+
+        <div class="graph-canvas-container" id="graph-canvas-container">
+          <canvas id="graph-canvas"></canvas>
+          <div class="graph-floating-controls">
+            <button class="graph-tool-btn" id="btn-graph-zoom-in" title="Yakınlaştır (+)">+</button>
+            <button class="graph-tool-btn" id="btn-graph-zoom-out" title="Uzaklaştır (−)">−</button>
+            <button class="graph-tool-btn" id="btn-graph-reset" title="Sıfırla (Reset)">↺</button>
+          </div>
+          <div class="graph-cursor-readout" id="graph-cursor-readout">x: 0.00, y: 0.00</div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           VIEW 3: PROGRAMCI MODU (PROGRAMMER CALCULATOR)
+           =================================================================== -->
+      <div class="calc-view" id="view-programmer" style="display: none;">
+        <!-- Base Values Stack (HEX, DEC, OCT, BIN) -->
+        <div class="programmer-bases-container">
+          <div class="prog-base-row" data-base="HEX" id="prog-base-hex">
+            <span class="prog-base-label">HEX</span>
+            <span class="prog-base-val" id="prog-val-hex">0</span>
+          </div>
+          <div class="prog-base-row active" data-base="DEC" id="prog-base-dec">
+            <span class="prog-base-label">DEC</span>
+            <span class="prog-base-val" id="prog-val-dec">0</span>
+          </div>
+          <div class="prog-base-row" data-base="OCT" id="prog-base-oct">
+            <span class="prog-base-label">OCT</span>
+            <span class="prog-base-val" id="prog-val-oct">0</span>
+          </div>
+          <div class="prog-base-row" data-base="BIN" id="prog-base-bin">
+            <span class="prog-base-label">BIN</span>
+            <span class="prog-base-val" id="prog-val-bin">0</span>
+          </div>
+        </div>
+
+        <!-- Word Size Switcher & Bit Toggler -->
+        <div class="prog-controls-bar">
+          <div class="prog-word-size-group">
+            <button class="prog-word-btn active" data-size="QWORD">QWORD</button>
+            <button class="prog-word-btn" data-size="DWORD">DWORD</button>
+            <button class="prog-word-btn" data-size="WORD">WORD</button>
+            <button class="prog-word-btn" data-size="BYTE">BYTE</button>
+          </div>
+          <span class="prog-bit-count-label" id="prog-bit-count">64-bit</span>
+        </div>
+
+        <!-- 64-bit Interactive Visualizer -->
+        <div class="prog-bit-grid" id="prog-bit-grid">
+          <!-- 64 clickable bit dots populated dynamically -->
+        </div>
+
+        <!-- Bitwise & Logic Operators Bar -->
+        <div class="prog-bitwise-bar">
+          <button class="key-btn key-fn prog-op-btn" data-prog-op="AND">AND</button>
+          <button class="key-btn key-fn prog-op-btn" data-prog-op="OR">OR</button>
+          <button class="key-btn key-fn prog-op-btn" data-prog-op="NOT">NOT</button>
+          <button class="key-btn key-fn prog-op-btn" data-prog-op="XOR">XOR</button>
+          <button class="key-btn key-fn prog-op-btn" data-prog-op="LSH">Lsh</button>
+          <button class="key-btn key-fn prog-op-btn" data-prog-op="RSH">Rsh</button>
+        </div>
+
+        <!-- Programmer Keypad (A-F, 0-9) -->
+        <div class="programmer-keypad" id="programmer-keypad">
+          <!-- Row 1: A, B, 7, 8, 9, ÷ -->
+          <button class="key-btn key-fn key-hex disabled" data-hex="A">A</button>
+          <button class="key-btn key-fn key-hex disabled" data-hex="B">B</button>
+          <button class="key-btn key-num" data-num="7">7</button>
+          <button class="key-btn key-num" data-num="8">8</button>
+          <button class="key-btn key-num" data-num="9">9</button>
+          <button class="key-btn key-op" data-op="÷">÷</button>
+
+          <!-- Row 2: C, D, 4, 5, 6, × -->
+          <button class="key-btn key-fn key-hex disabled" data-hex="C">C</button>
+          <button class="key-btn key-fn key-hex disabled" data-hex="D">D</button>
+          <button class="key-btn key-num" data-num="4">4</button>
+          <button class="key-btn key-num" data-num="5">5</button>
+          <button class="key-btn key-num" data-num="6">6</button>
+          <button class="key-btn key-op" data-op="×">×</button>
+
+          <!-- Row 3: E, F, 1, 2, 3, − -->
+          <button class="key-btn key-fn key-hex disabled" data-hex="E">E</button>
+          <button class="key-btn key-fn key-hex disabled" data-hex="F">F</button>
+          <button class="key-btn key-num" data-num="1">1</button>
+          <button class="key-btn key-num" data-num="2">2</button>
+          <button class="key-btn key-num" data-num="3">3</button>
+          <button class="key-btn key-op" data-op="−">−</button>
+
+          <!-- Row 4: CE, C, ⌫, 0, (±), + -->
+          <button class="key-btn key-top" data-action="ce">CE</button>
+          <button class="key-btn key-top" data-action="c">C</button>
+          <button class="key-btn key-top" data-action="backspace">⌫</button>
+          <button class="key-btn key-num key-zero" data-num="0">0</button>
+          <button class="key-btn key-equals" data-action="equals" style="grid-column: span 2;">=</button>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           VIEW 4: TARİH HESAPLAMA (DATE CALCULATION)
+           =================================================================== -->
+      <div class="calc-view" id="view-date" style="display: none;">
+        <div class="date-tabs-bar">
+          <button class="date-tab-btn active" id="tab-date-diff">Tarihler Arasındaki Fark</button>
+          <button class="date-tab-btn" id="tab-date-add">Gün Ekle veya Çıkar</button>
+        </div>
+
+        <!-- Mode A: Difference Between Two Dates -->
+        <div class="date-subview active" id="date-subview-diff">
+          <div class="date-form-group">
+            <label class="date-label">Başlangıç Tarihi:</label>
+            <input type="date" class="date-picker-input" id="date-diff-from">
+          </div>
+          <div class="date-form-group">
+            <label class="date-label">Bitiş Tarihi:</label>
+            <input type="date" class="date-picker-input" id="date-diff-to">
+          </div>
+
+          <div class="date-result-card" id="date-diff-result">
+            <span class="date-result-title">Fark</span>
+            <div class="date-result-highlight" id="date-diff-main">Aynı gün</div>
+            <div class="date-result-details" id="date-diff-sub">0 gün</div>
+          </div>
+        </div>
+
+        <!-- Mode B: Add or Subtract Days -->
+        <div class="date-subview" id="date-subview-add" style="display: none;">
+          <div class="date-form-group">
+            <label class="date-label">Başlangıç Tarihi:</label>
+            <input type="date" class="date-picker-input" id="date-add-start">
+          </div>
+
+          <div class="date-operation-choice">
+            <label class="radio-label">
+              <input type="radio" name="date-op-mode" value="add" checked>
+              <span>Ekle (+)</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="date-op-mode" value="sub">
+              <span>Çıkar (−)</span>
+            </label>
+          </div>
+
+          <div class="date-inputs-grid">
+            <div class="date-number-col">
+              <label>Yıl</label>
+              <input type="number" id="date-add-years" min="0" value="0" class="date-num-input">
+            </div>
+            <div class="date-number-col">
+              <label>Ay</label>
+              <input type="number" id="date-add-months" min="0" value="0" class="date-num-input">
+            </div>
+            <div class="date-number-col">
+              <label>Gün</label>
+              <input type="number" id="date-add-days" min="0" value="0" class="date-num-input">
+            </div>
+          </div>
+
+          <div class="date-result-card" id="date-add-result">
+            <span class="date-result-title">Hesaplanan Tarih</span>
+            <div class="date-result-highlight" id="date-add-main">-</div>
+            <div class="date-result-details" id="date-add-sub">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ===================================================================
+           VIEW 5: EVRENSEL DÖNÜŞTÜRÜCÜ (CONVERTERS)
+           =================================================================== -->
+      <div class="calc-view" id="view-converter" style="display: none;">
+        <!-- Top conversion row -->
+        <div class="converter-box">
+          <div class="converter-value-row">
+            <input type="text" class="converter-val-input" id="conv-input-from" value="1">
+            <select class="converter-select" id="conv-select-from"></select>
+          </div>
+          
+          <div class="converter-swap-wrap">
+            <button class="converter-swap-btn" id="btn-converter-swap" title="Birimleri Değiştir (⇄)">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+                <polyline points="17 14 12 9 7 14"></polyline>
+                <line x1="12" y1="9" x2="12" y2="21"></line>
+              </svg>
+            </button>
+          </div>
+
+          <div class="converter-value-row">
+            <input type="text" class="converter-val-input" id="conv-input-to" value="0" readonly>
+            <select class="converter-select" id="conv-select-to"></select>
+          </div>
+        </div>
+
+        <!-- Formula and Equivalency Info Card -->
+        <div class="converter-formula-card" id="converter-formula-card">
+          <div class="conv-rate-line" id="conv-rate-text">1 = 1</div>
+          <div class="conv-extra-line" id="conv-extra-text">Yaklaşık değerler</div>
+        </div>
+
+        <!-- Converter Dedicated Compact Keypad -->
+        <div class="converter-keypad" id="converter-keypad">
+          <button class="key-btn key-top" data-conv-action="ce">CE</button>
+          <button class="key-btn key-top" data-conv-action="c">C</button>
+          <button class="key-btn key-top" data-conv-action="backspace">⌫</button>
+
+          <button class="key-btn key-num" data-conv-num="7">7</button>
+          <button class="key-btn key-num" data-conv-num="8">8</button>
+          <button class="key-btn key-num" data-conv-num="9">9</button>
+
+          <button class="key-btn key-num" data-conv-num="4">4</button>
+          <button class="key-btn key-num" data-conv-num="5">5</button>
+          <button class="key-btn key-num" data-conv-num="6">6</button>
+
+          <button class="key-btn key-num" data-conv-num="1">1</button>
+          <button class="key-btn key-num" data-conv-num="2">2</button>
+          <button class="key-btn key-num" data-conv-num="3">3</button>
+
+          <button class="key-btn key-fn" data-conv-action="negate">±</button>
+          <button class="key-btn key-num" data-conv-num="0">0</button>
+          <button class="key-btn key-num" data-conv-action="decimal">.</button>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- Side Panel: Global Persistent History & Memory Drawer -->
+    <aside class="side-panel" id="side-panel">
+      <div class="panel-header">
+        <div class="panel-tabs">
+          <button class="panel-tab active" id="tab-history">Geçmiş</button>
+          <button class="panel-tab" id="tab-memory">Bellek</button>
+        </div>
+        <button class="panel-close-btn" id="btn-close-side-panel" title="Kapat">✕</button>
+      </div>
+
+      <!-- History Content -->
+      <div class="panel-content active" id="content-history">
+        <div class="history-list" id="history-list"></div>
+        <div class="panel-footer" id="history-footer">
+          <button class="panel-action-btn clear-history-btn" id="btn-clear-history" title="Tüm geçmişi kalıcı olarak sil">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+            <span id="btn-clear-history-text">Geçmişi Temizle</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Memory Content -->
+      <div class="panel-content" id="content-memory">
+        <div class="memory-list" id="memory-list"></div>
+        <div class="panel-footer" id="memory-footer">
+          <button class="panel-action-btn clear-memory-btn" id="btn-clear-memory" title="Tüm belleği sil">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"></polyline>
+              <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+              <line x1="10" y1="11" x2="10" y2="17"></line>
+              <line x1="14" y1="11" x2="14" y2="17"></line>
+            </svg>
+            <span id="btn-clear-memory-text">Belleği Temizle</span>
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Theme Selection Modal Overlay -->
+    <div class="modal-overlay" id="theme-modal" style="display: none;">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <h3 class="modal-title" id="theme-modal-title">Tema ve Görünüm Ayarları</h3>
+            <p class="modal-subtitle" id="theme-modal-subtitle">30+ özel tema (Açık ve Koyu mod ile 60 farklı görünüm varyasyonu)</p>
+          </div>
+          <button class="modal-close-btn" id="btn-close-themes">✕</button>
+        </div>
+
+        <!-- Color Mode and Sound -->
+        <div class="theme-settings-row">
+          <span class="setting-label" id="lbl-setting-color">Renk:</span>
+          <div class="segmented-control">
+            <button class="seg-btn" id="seg-mode-dark" data-mode="dark">Koyu</button>
+            <button class="seg-btn" id="seg-mode-light" data-mode="light">Açık</button>
+          </div>
+          <div class="sound-toggle-wrap">
+            <label class="toggle-switch">
+              <input type="checkbox" id="chk-sound-enabled" checked>
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="sound-label" id="lbl-setting-sound">Ses</span>
+          </div>
+        </div>
+
+        <!-- Transparency Setting (Saydamlık Aç/Kapa) -->
+        <div class="theme-settings-row">
+          <span class="setting-label" id="lbl-setting-transparency">Saydamlık (Akrilik):</span>
+          <div class="sound-toggle-wrap">
+            <label class="toggle-switch">
+              <input type="checkbox" id="chk-transparency-modal">
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="sound-label" id="lbl-transparency-status">Kapalı (Opak)</span>
+          </div>
+        </div>
+
+        <!-- Button Transparency Sub-Setting (Saydam mod açıkken görünür) -->
+        <div class="theme-settings-row sub-setting-row" id="row-btn-transparency" style="display: none;">
+          <span class="setting-label" id="lbl-setting-btn-transparency">Düğme Şeffaflığı:</span>
+          <div class="sound-toggle-wrap">
+            <label class="toggle-switch">
+              <input type="checkbox" id="chk-btn-transparency">
+              <span class="toggle-slider"></span>
+            </label>
+            <span class="sound-label" id="lbl-btn-transparency-status">Belirgin (Opak Düğmeler)</span>
+          </div>
+        </div>
+
+        <!-- Language Setting (Otomatik Sistem Dili & Dil Seçimi) -->
+        <!-- Language Setting (Otomatik Sistem Dili & Dil Seçimi) -->
+        <div class="theme-settings-row">
+          <span class="setting-label" id="lbl-setting-language">Dil / Language:</span>
+          <select id="select-app-language" class="language-dropdown-hidden" style="display: none;">
+            <option value="auto">🌐 Otomatik (Sistem Dili)</option>
+            <option value="tr">🇹🇷 Türkçe</option>
+            <option value="en">🇺🇸 English</option>
+            <option value="de">🇩🇪 Deutsch</option>
+            <option value="fr">🇫🇷 Français</option>
+            <option value="es">🇪🇸 Español</option>
+            <option value="it">🇮🇹 Italiano</option>
+            <option value="pt">🇧🇷 Português</option>
+            <option value="ru">🇷🇺 Русский</option>
+            <option value="ja">🇯🇵 日本語</option>
+            <option value="zh">🇨🇳 简体中文</option>
+            <option value="ar">🇸🇦 العربية</option>
+            <option value="ko">🇰🇷 한국어</option>
+          </select>
+          <div class="themed-dropdown" id="themed-lang-dropdown">
+            <button type="button" class="themed-dropdown-btn" id="btn-lang-dropdown">
+              <span class="dropdown-selected-label" id="lbl-selected-lang">🌐 Otomatik (Sistem Dili)</span>
+              <svg class="dropdown-arrow" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+            <div class="themed-dropdown-menu" id="menu-lang-dropdown" style="display: none;">
+              <div class="themed-dropdown-item active" data-lang="auto">🌐 Otomatik (Sistem Dili)</div>
+              <div class="themed-dropdown-item" data-lang="tr">🇹🇷 Türkçe</div>
+              <div class="themed-dropdown-item" data-lang="en">🇺🇸 English</div>
+              <div class="themed-dropdown-item" data-lang="de">🇩🇪 Deutsch</div>
+              <div class="themed-dropdown-item" data-lang="fr">🇫🇷 Français</div>
+              <div class="themed-dropdown-item" data-lang="es">🇪🇸 Español</div>
+              <div class="themed-dropdown-item" data-lang="it">🇮🇹 Italiano</div>
+              <div class="themed-dropdown-item" data-lang="pt">🇧🇷 Português</div>
+              <div class="themed-dropdown-item" data-lang="ru">🇷🇺 Русский</div>
+              <div class="themed-dropdown-item" data-lang="ja">🇯🇵 日本語</div>
+              <div class="themed-dropdown-item" data-lang="zh">🇨🇳 简体中文</div>
+              <div class="themed-dropdown-item" data-lang="ar">🇸🇦 العربية</div>
+              <div class="themed-dropdown-item" data-lang="ko">🇰🇷 한국어</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Themes Grid (All 30 Themes) -->
+        <div class="themes-grid" id="themes-grid">
+          <div class="theme-card active" data-theme="default">
+            <div class="theme-preview preview-default">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Default</span>
+            <span class="theme-tag">Klasik Modern</span>
+          </div>
+
+          <div class="theme-card" data-theme="apple-ios">
+            <div class="theme-preview preview-apple-ios">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Apple IOS</span>
+            <span class="theme-tag">Clone</span>
+          </div>
+
+          <div class="theme-card" data-theme="windows11">
+            <div class="theme-preview preview-windows11">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Windows 11</span>
+            <span class="theme-tag">Mica / Clone</span>
+          </div>
+
+          <div class="theme-card" data-theme="claymorphism">
+            <div class="theme-preview preview-claymorphism">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Claymorphism</span>
+            <span class="theme-tag">3D Marshmallow</span>
+          </div>
+
+          <div class="theme-card" data-theme="cybercore">
+            <div class="theme-preview preview-cybercore">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Cybercore</span>
+            <span class="theme-tag">Y2K Techno</span>
+          </div>
+
+          <div class="theme-card" data-theme="neobrutalism">
+            <div class="theme-preview preview-neobrutalism">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Neobrutalism</span>
+            <span class="theme-tag">Bold & Contrast</span>
+          </div>
+
+          <div class="theme-card" data-theme="scrapbook">
+            <div class="theme-preview preview-scrapbook">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Scrapbook</span>
+            <span class="theme-tag">Paper Craft</span>
+          </div>
+
+          <div class="theme-card" data-theme="pixelart">
+            <div class="theme-preview preview-pixelart">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Pixelart</span>
+            <span class="theme-tag">8-Bit Retro</span>
+          </div>
+
+          <div class="theme-card" data-theme="glassmorphism">
+            <div class="theme-preview preview-glassmorphism">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Glassmorphism</span>
+            <span class="theme-tag">Frosted Blur</span>
+          </div>
+
+          <div class="theme-card" data-theme="neumorphism">
+            <div class="theme-preview preview-neumorphism">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Neumorphism</span>
+            <span class="theme-tag">Soft 3D Surface</span>
+          </div>
+
+          <div class="theme-card" data-theme="cyberpunk">
+            <div class="theme-preview preview-cyberpunk">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Cyberpunk</span>
+            <span class="theme-tag">Neon Night City</span>
+          </div>
+
+          <div class="theme-card" data-theme="wabi-sabi">
+            <div class="theme-preview preview-wabi-sabi">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Wabi Sabi</span>
+            <span class="theme-tag">Zen Organic</span>
+          </div>
+
+          <!-- 13. Synthwave -->
+          <div class="theme-card" data-theme="synthwave">
+            <div class="theme-preview preview-synthwave">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Synthwave</span>
+            <span class="theme-tag">80s Neon Sunset</span>
+          </div>
+
+          <!-- 14. Dracula -->
+          <div class="theme-card" data-theme="dracula">
+            <div class="theme-preview preview-dracula">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Dracula</span>
+            <span class="theme-tag">Gothic Pro</span>
+          </div>
+
+          <!-- 15. Nord -->
+          <div class="theme-card" data-theme="nord">
+            <div class="theme-preview preview-nord">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Nord</span>
+            <span class="theme-tag">Arctic Slate</span>
+          </div>
+
+          <!-- 16. Solarized -->
+          <div class="theme-card" data-theme="solarized">
+            <div class="theme-preview preview-solarized">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Solarized</span>
+            <span class="theme-tag">Precision Studio</span>
+          </div>
+
+          <!-- 17. Matrix -->
+          <div class="theme-card" data-theme="matrix">
+            <div class="theme-preview preview-matrix">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Matrix</span>
+            <span class="theme-tag">Terminal Green</span>
+          </div>
+
+          <!-- 18. Matcha Latte -->
+          <div class="theme-card" data-theme="matcha">
+            <div class="theme-preview preview-matcha">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Matcha Latte</span>
+            <span class="theme-tag">Cozy Japanese Café</span>
+          </div>
+
+          <!-- 19. Vaporwave -->
+          <div class="theme-card" data-theme="vaporwave">
+            <div class="theme-preview preview-vaporwave">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Vaporwave</span>
+            <span class="theme-tag">90s Aesthetic</span>
+          </div>
+
+          <!-- 20. Monochrome Luxury -->
+          <div class="theme-card" data-theme="monochrome">
+            <div class="theme-preview preview-monochrome">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Monochrome</span>
+            <span class="theme-tag">Minimalist Luxury</span>
+          </div>
+
+          <!-- 21. Catppuccin Mocha -->
+          <div class="theme-card" data-theme="catppuccin">
+            <div class="theme-preview preview-catppuccin">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Catppuccin</span>
+            <span class="theme-tag">Mocha Pastel</span>
+          </div>
+
+          <!-- 22. Tokyo Night -->
+          <div class="theme-card" data-theme="tokyo-night">
+            <div class="theme-preview preview-tokyo-night">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Tokyo Night</span>
+            <span class="theme-tag">Neon Shinjuku</span>
+          </div>
+
+          <!-- 23. Rosé Pine -->
+          <div class="theme-card" data-theme="rose-pine">
+            <div class="theme-preview preview-rose-pine">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Rosé Pine</span>
+            <span class="theme-tag">Vintage Natural</span>
+          </div>
+
+          <!-- 24. Gruvbox -->
+          <div class="theme-card" data-theme="gruvbox">
+            <div class="theme-preview preview-gruvbox">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Gruvbox</span>
+            <span class="theme-tag">Retro Autumn</span>
+          </div>
+
+          <!-- 25. One Dark Pro -->
+          <div class="theme-card" data-theme="one-dark">
+            <div class="theme-preview preview-one-dark">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">One Dark Pro</span>
+            <span class="theme-tag">Iconic Editor</span>
+          </div>
+
+          <!-- 26. Emerald Forest -->
+          <div class="theme-card" data-theme="emerald">
+            <div class="theme-preview preview-emerald">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Emerald Forest</span>
+            <span class="theme-tag">Deep Nature & Gold</span>
+          </div>
+
+          <!-- 27. Sunset Horizon -->
+          <div class="theme-card" data-theme="sunset">
+            <div class="theme-preview preview-sunset">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Sunset Horizon</span>
+            <span class="theme-tag">Warm Twilight</span>
+          </div>
+
+          <!-- 28. Coffee & Cream -->
+          <div class="theme-card" data-theme="coffee">
+            <div class="theme-preview preview-coffee">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Coffee & Cream</span>
+            <span class="theme-tag">Mocha Latte</span>
+          </div>
+
+          <!-- 29. Midnight AMOLED -->
+          <div class="theme-card" data-theme="amoled">
+            <div class="theme-preview preview-amoled">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Midnight AMOLED</span>
+            <span class="theme-tag">True Black #000</span>
+          </div>
+
+          <!-- 30. Candy Pastel -->
+          <div class="theme-card" data-theme="pastel">
+            <div class="theme-preview preview-pastel">
+              <div class="preview-dot"></div>
+              <div class="preview-bar"></div>
+            </div>
+            <span class="theme-name">Candy Pastel</span>
+            <span class="theme-tag">Sweet Macaron</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         ABOUT MODAL (HAKKINDA PENCERESİ)
+         =================================================================== -->
+    <div class="modal-overlay" id="about-modal" style="display: none;">
+      <div class="modal-card about-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <h3 class="modal-title" id="about-modal-title">Hakkında</h3>
+          </div>
+          <button class="modal-close-btn" id="btn-close-about">✕</button>
+        </div>
+
+        <div class="about-content">
+          <div class="about-logo-wrapper">
+            <img src="icon.svg" class="about-app-logo" alt="CIBO Logo">
+          </div>
+          <h2 class="about-app-name">CIBO Calculator</h2>
+          <div class="about-version-badge">v1.3.3</div>
+          <p class="about-by">by <a href="https://aselens.com" id="link-aselens-website" class="about-link" target="_blank" rel="noopener">Aselens Software</a></p>
+
+          <div class="about-divider"></div>
+
+          <div class="about-features-list">
+            <div class="about-feature-item">
+              <span class="about-feature-icon">✨</span>
+              <span class="about-feature-text" id="about-feat-1">18 Profesyonel Hesaplama ve Dönüştürme Modu</span>
+            </div>
+            <div class="about-feature-item">
+              <span class="about-feature-icon">🎨</span>
+              <span class="about-feature-text" id="about-feat-2">30+ Özel Tema (Açık & Koyu mod varyasyonları ile 60 farklı görünüm)</span>
+            </div>
+            <div class="about-feature-item">
+              <span class="about-feature-icon">⌨️</span>
+              <span class="about-feature-text" id="about-feat-3">Kişiselleştirilebilir Klavye Kısayolları</span>
+            </div>
+            <div class="about-feature-item">
+              <span class="about-feature-icon">🌐</span>
+              <span class="about-feature-text" id="about-feat-5">Otomatik Sistem Dili Algılama ve 12 Küresel Dil Desteği</span>
+            </div>
+            <div class="about-feature-item">
+              <span class="about-feature-icon">🔊</span>
+              <span class="about-feature-text" id="about-feat-6">Her temaya özel dokunsal ses efektleri</span>
+            </div>
+          </div>
+
+          <div class="about-footer">
+            <span class="about-copyright">© 2026 Aselens Software. Tüm Hakları Saklıdır.</span>
+            <button class="about-action-btn" id="btn-about-ok">Tamam</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         SHORTCUTS CONFIG MODAL (KISAYOL AYARLARI PENCERESİ)
+         =================================================================== -->
+    <div class="modal-overlay" id="shortcuts-modal" style="display: none;">
+      <div class="modal-card shortcuts-card">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <h3 class="modal-title" id="shortcuts-modal-title">Klavye Kısayolları</h3>
+            <p class="modal-subtitle" id="shortcuts-modal-subtitle">Mod geçiş kısayollarını kişiselleştirin</p>
+          </div>
+          <button class="modal-close-btn" id="btn-close-shortcuts">✕</button>
+        </div>
+
+        <div class="shortcuts-content">
+          <div class="shortcuts-list" id="shortcuts-list">
+            <!-- Dynamically populated rows -->
+          </div>
+          <div class="shortcuts-footer">
+            <button class="shortcuts-reset-btn" id="btn-reset-shortcuts">Varsayılanlara Sıfırla</button>
+            <button class="shortcuts-done-btn" id="btn-done-shortcuts">Tamam</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================================================================
+         CUSTOM CONTEXT MENU (SAĞ TIK MENÜSÜ)
+         =================================================================== -->
+    <div class="custom-context-menu" id="custom-context-menu" style="display: none;">
+      <div class="context-item" data-action="copy">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+        <span class="context-label" id="ctx-label-copy">Kopyala</span>
+        <span class="context-shortcut">Ctrl+C</span>
+      </div>
+      <div class="context-item" data-action="paste">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+        </svg>
+        <span class="context-label" id="ctx-label-paste">Yapıştır</span>
+        <span class="context-shortcut">Ctrl+V</span>
+      </div>
+      <div class="context-divider"></div>
+      <div class="context-item" data-action="clear">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        </svg>
+        <span class="context-label" id="ctx-label-clear">Temizle</span>
+        <span class="context-shortcut">Esc</span>
+      </div>
+      <div class="context-item" data-action="history">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+        <span class="context-label" id="ctx-label-history">Geçmiş</span>
+      </div>
+      <div class="context-divider"></div>
+      <div class="context-item" data-action="shortcuts">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+          <path d="M6 8h.001M10 8h.001M14 8h.001M18 8h.001M6 12h.001M10 12h.001M14 12h.001M18 12h.001M7 16h10"></path>
+        </svg>
+        <span class="context-label" id="ctx-label-shortcuts">Kısayol Ayarları</span>
+      </div>
+      <div class="context-item" data-action="themes">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M12 2a10 10 0 0 0 0 20v-20z"></path>
+        </svg>
+        <span class="context-label" id="ctx-label-themes">Temalar</span>
+      </div>
+      <div class="context-item" data-action="about">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <span class="context-label" id="ctx-label-about">Hakkında</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="i18n.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "name": "cibo-calculator",
+  "productName": "CIBO Calculator",
+  "version": "1.3.3",
+  "description": "Modern, customizable desktop calculator and unit converter with 30+ themes",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aselens/cibo-calculator.git"
+  },
+  "homepage": "https://aselens.com",
+  "bugs": {
+    "url": "https://github.com/aselens/cibo-calculator/issues"
+  },
+  "scripts": {
+    "start": "electron .",
+    "test": "electron tests/test_app.js"
+  },
+  "keywords": [
+    "calculator",
+    "hesap-makinesi",
+    "electron",
+    "desktop",
+    "themes",
+    "unit-converter",
+    "graphing",
+    "programmer-calculator",
+    "scientific-calculator",
+    "aselens"
+  ],
+  "author": "Aselens Software <https://aselens.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^44.7.2"
+  }
+}

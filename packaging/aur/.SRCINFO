@@ -1,0 +1,18 @@
+pkgbase = cibo-calculator
+	pkgdesc = Modern, customizable desktop calculator and unit converter with 30+ themes
+	pkgver = 1.3.3
+	pkgrel = 1
+	url = https://github.com/aselens/cibo-calculator
+	arch = any
+	license = MIT
+	makedepends = git
+	depends = electron
+	depends = nodejs
+	source = cibo-calculator-1.3.3.tar.gz::https://github.com/aselens/cibo-calculator/archive/refs/tags/v1.3.3.tar.gz
+	source = cibo-calculator.sh
+	source = cibo-calculator.desktop
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+
+pkgname = cibo-calculator
